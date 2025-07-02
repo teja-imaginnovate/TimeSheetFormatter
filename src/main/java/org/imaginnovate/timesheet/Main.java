@@ -40,7 +40,7 @@ public class Main {
 
         String fileExtension = fileName.substring(dotIndex + 1);
         if ("csv".equals(fileExtension)) {
-            System.out.println("csv file type detected...");
+            System.out.println("CSV file type detected...");
             try {
                 XSSFWorkbook workbook = convertCSVToExcel(inputFile);
                 System.out.println("CSV converted to XLSX successfully!, Generating time sheet report....");
@@ -54,7 +54,7 @@ public class Main {
             }
         }
         if ("xlsx".equals(fileExtension)) {
-            System.out.println("xlsx file type detected");
+            System.out.println("XLSX file type detected");
             try {
                 FileInputStream fileInputStream = new FileInputStream(inputFile);
                 byte[] buffer = new byte[(int) inputFile.length()];
