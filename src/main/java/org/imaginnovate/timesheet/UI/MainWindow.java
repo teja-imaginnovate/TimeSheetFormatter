@@ -67,7 +67,7 @@ public class MainWindow extends JFrame {
             boolean status  = fileProcessService.process(tableModel);
             dialog.dispose();
             if(status){
-                JOptionPane.showMessageDialog(this, "Time Sheet generated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Time Sheet generated successfully. - " + FileProcessService.OUTPUT_FILE_PATH, "Success", JOptionPane.INFORMATION_MESSAGE);
             }else{
                 JOptionPane.showMessageDialog(this, "Time Sheet generation failed.", "Failed", JOptionPane.ERROR_MESSAGE);
             }

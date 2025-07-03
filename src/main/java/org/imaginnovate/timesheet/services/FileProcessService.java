@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 
 public class FileProcessService {
 
-    private static final String OUTPUT_FILE_PATH = "TimeSheet Report.xlsx";
+    public static final String OUTPUT_FILE_PATH = "TimeSheet Report.xlsx";
 
     private static final ConverterService converterService = new ConverterService();
 
