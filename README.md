@@ -1,37 +1,40 @@
+# Time Sheet Formatter
 
-# 🕒 TimeSheetFormatter
+A Java-based desktop application to convert raw time sheet CSV files into a standardized Excel report for easy reporting.
 
-**TimeSheetFormatter** is a lightweight Java application designed to transform raw timesheet data into a clean, professional report—perfect for sharing with stakeholders.
+## Features
 
-## 🚀 Features
+- Built-in GUI using Java Swing
+- Load and preview raw time sheet CSV files
+- Format and export time sheet data to Excel (`TimeSheet Report.xlsx`)
 
-- ✅ Accepts **both CSV and Excel** (`.xlsx`) files as input
-- ✅ Generates a formatted Excel report named **`TimeSheet Report.xlsx`**
-- ✅ Output file is saved in the **same directory** where the app is executed
-- ✅ Fully implemented in **Java**
-- ✅ Requires only **JDK 17** and an **IDE** to run
+## Requirements
 
-## 🛠 Requirements
+- JDK 17 or higher
 
-- Java Development Kit (JDK) 17
-- Any Java IDE (e.g., IntelliJ IDEA, Eclipse, VS Code)
+## How to Use
 
-## 📦 How to Run
+1. **Build and Run the Application**
+   - Compile and run the application using your preferred IDE or from the terminal:
+     ```
+     javac -d out src/**/*.java
+     java -cp out com.imaginnovate.Main.java
+     ```
 
-1. Clone or download the repository.
-2. Open the project in your preferred IDE.
-3. Build and run the application.
-4. Pass the path to your **CSV or Excel file** as a command-line argument.
+2. **Open a Raw Time Sheet**
+   - Click on the `Open CSV file` button in the GUI.
+   - Select your raw time sheet CSV file.
+   - The data will be loaded and displayed in a table.
 
-```bash
-java -jar TimeSheetFormatter.jar /path/to/your/timesheet.csv
-```
+3. **Format and Export**
+   - Review the loaded data.
+   - Click the `Format` button.
+   - The application will process the data and generate a formatted Excel report named `TimeSheet Report.xlsx` in the same directory as the application.
 
-## 📄 Output
+## Output
 
-- The application will generate a file named **`TimeSheet Report.xlsx`**.
-- This file will be saved in the **same location** where the app is executed.
+- The formatted report will be saved as `TimeSheet Report.xlsx` in the application's directory.
 
-## 🐞 Issues
+## License
 
-Feel free to try it out! If you encounter any errors or issues, please report them in the Issues section.
+This project is for internal use only.
