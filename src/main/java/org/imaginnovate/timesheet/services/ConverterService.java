@@ -6,7 +6,6 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -22,10 +21,6 @@ public class ConverterService {
     private static final String OUT_PUT_DATE_FORMAT = "dd-MMM-yyyy";
     private static final String CALI_BRI_STYLE = "Calibri";
 
-    public byte[] generateFromExcel(ByteArrayInputStream byteArrayInputStream) throws IOException {
-        Workbook workbook = new XSSFWorkbook(byteArrayInputStream);
-        return generate(workbook);
-    }
 
     public byte[] generateFromCSV(Workbook workbook) throws IOException {
         return generate(workbook);
@@ -379,8 +374,8 @@ public class ConverterService {
         return sourceSheet.getRow(rowIndex).getCell(colIndex).toString();
     }
 
-    private Cell findTaskHoursFromSheet(Sheet sourceSheet, int rowIndex) {
-        int colIndex = this.findColumnIndex(sourceSheet, "Task Hours");
+    private Cell findTotalHoursFromSheet(Sheet sourceSheet, int rowIndex) {
+        int colIndex = this.findColumnIndex(sourceSheet, "Total Hours");
         return sourceSheet.getRow(rowIndex).getCell(colIndex);
     }
 
@@ -402,10 +397,6 @@ public class ConverterService {
                     StringBuilder token = new StringBuilder(newTask);
                     token.append("#");
                     token.append(getDay);
-                    double existingHours = 0.0;
-                    if (!existingTask.isEmpty()) {
-                        existingHours = this.findHoursInDouble(projectTimeCell.toString());
-                    }
 
                     if (!allTasks.contains(token.toString())) {
                         allTasks.add(token.toString());
@@ -416,11 +407,10 @@ public class ConverterService {
                         existingTask = existingTask + newTask;
                     }
 
-                    Cell hoursCell = this.findTaskHoursFromSheet(sourceSheet, rowIndex);
+                    Cell hoursCell = this.findTotalHoursFromSheet(sourceSheet, rowIndex);
                     String hours = hoursCell.getStringCellValue();
                     double hoursDouble = this.findHoursInDouble(hours);
-                    existingHours = existingHours + hoursDouble;
-                    projectTimeCell.setCellValue(existingHours);
+                    projectTimeCell.setCellValue(hoursDouble);
                     projectTimeCell.setCellStyle(style);
                     descriptionCell.setCellValue(existingTask);
                     descriptionCell.setCellStyle(style);
@@ -564,7 +554,6 @@ public class ConverterService {
     }
 
     private double findHoursInDouble(String hours) {
-       // System.out.println(hours);
         if (hours == null) {
             return 0;
         }
