@@ -1,5 +1,7 @@
 package org.imaginnovate.timesheet.services;
 
+import com.joestelmach.natty.DateGroup;
+import com.joestelmach.natty.Parser;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -10,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -40,8 +43,7 @@ public class ConverterService {
             for (int rowIndex = 1; rowIndex < rowCount; rowIndex++) {
                 Cell dateCell = this.findDateFromSheet(sourceSheet, rowIndex);
                 String inputDate = dateCell.toString();
-                DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern(RAW_DATE_FORMAT);
-                LocalDate localDate = LocalDate.parse(inputDate, inputFormatter);
+                LocalDate localDate = parseDateFromCellValue(inputDate);
                 DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(OUT_PUT_DATE_FORMAT);
                 String formattedDateStr = localDate.format(outputFormatter);
                 dateCell.setCellValue(formattedDateStr);
@@ -71,13 +73,28 @@ public class ConverterService {
         }
     }
 
+
     private LocalDate parseDateFromCell(Cell cell) {
         if (cell == null) {
             return null;
         } else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(RAW_DATE_FORMAT);
-            return LocalDate.parse(cell.toString(), formatter);
+            return getLocalDate(cell.getStringCellValue());
         }
+    }
+
+    private LocalDate parseDateFromCellValue(String cellValue) {
+        if (cellValue == null) {
+            return null;
+        } else {
+            return getLocalDate(cellValue);
+        }
+    }
+
+    private static LocalDate getLocalDate(String input) {
+        Parser parser = new Parser();
+        List<DateGroup> groups = parser.parse(input);
+        Date date = groups.get(0).getDates().get(0);
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     private void addSummaryPage(Workbook outputWorkbook, Map<String, Double> employeeNames, CellStyle borderStyle) {
@@ -196,7 +213,7 @@ public class ConverterService {
                 String cellValue = cell.toString();
 
                 try {
-                    date = LocalDate.parse(cellValue, DateTimeFormatter.ofPattern(OUT_PUT_DATE_FORMAT));
+                    date = parseDateFromCellValue(cellValue);
                 } catch (DateTimeParseException var16) {
                     System.out.println(var16.getMessage());
                 }
@@ -318,7 +335,7 @@ public class ConverterService {
                         Cell dateCellSrc = sourceRow.getCell(3);
                         if (empCell != null && dateCellSrc != null && name.equals(empCell.toString())) {
                             try {
-                                LocalDate srcDate = LocalDate.parse(dateCellSrc.toString(), formatter);
+                                LocalDate srcDate = parseDateFromCellValue(dateCellSrc.toString());
                                 if (srcDate.equals(date)) {
                                     Cell titleDataCell = sourceRow.getCell(4);
                                     if (titleDataCell != null) {
